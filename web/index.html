@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            button {
+                height: 64px;
+                width: 100vw;
+            }
+        </style>
+    </head>
+    <body>
+        <h1> WEB VIEW - HTML</h1>
+        <h1 id="count"></h1>
+
+        <button id="btn">Increment Count</button>
+
+        <div id="logs"></div>
+        <script>
+            const $logs = document.getElementById('logs');
+            
+            console.log = (text) => {
+                $logs.innerHTML += `<p>${text}</p>`;
+            }
+
+            const $count = document.getElementById("count");
+            const $btn = document.getElementById("btn");
+
+            let count = 0
+            
+            $count.innerHTML = count
+            const setCount = (num) => {
+                count = num
+                console.log('from setCount')
+                console.log(count)
+                $count.innerHTML = count
+                window.ReactNativeWebView.postMessage(count)
+            } 
+
+            $btn.addEventListener("click", () => {
+                setCount(count + 1)
+            })
+
+            const rnEventHandler = (event, a) => {
+                console.log("Received post message");
+                const c = window.getRNData()
+                console.log(c)
+                setCount(parseInt(c))
+            }
+
+            document.addEventListener("message", rnEventHandler, true);
+            window.addEventListener("message", rnEventHandler, true);
+        </script>
+    </body>
+</html>
